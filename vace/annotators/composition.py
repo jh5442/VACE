@@ -44,7 +44,7 @@ class CompositionAnnotator:
 
 
 class ReferenceAnythingAnnotator:
-    def __init__(self, cfg):
+    def __init__(self, cfg, device=None):
         from .subject import SubjectAnnotator
         self.sbjref_ins = SubjectAnnotator(cfg['SUBJECT'] if 'SUBJECT' in cfg else cfg)
         self.key_map = {
@@ -74,10 +74,11 @@ class ReferenceAnythingAnnotator:
 
 
 class AnimateAnythingAnnotator:
-    def __init__(self, cfg):
+    def __init__(self, cfg, device=None):
         from .pose import PoseBodyFaceVideoAnnotator
         self.pose_ins = PoseBodyFaceVideoAnnotator(cfg['POSE'])
         self.ref_ins = ReferenceAnythingAnnotator(cfg['REFERENCE'])
+        # self.device = device
 
     def forward(self, frames=None, images=None, mode=None, return_mask=None, mask_cfg=None):
         ret_data = {}
@@ -91,7 +92,7 @@ class AnimateAnythingAnnotator:
 
 
 class SwapAnythingAnnotator:
-    def __init__(self, cfg):
+    def __init__(self, cfg, device=None):
         from .inpainting import InpaintingVideoAnnotator
         self.inp_ins = InpaintingVideoAnnotator(cfg['INPAINTING'])
         self.ref_ins = ReferenceAnythingAnnotator(cfg['REFERENCE'])

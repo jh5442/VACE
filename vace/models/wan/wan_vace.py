@@ -84,7 +84,7 @@ class WanVace(WanT2V):
             device=self.device)
 
         logging.info(f"Creating VaceWanModel from {checkpoint_dir}")
-        self.model = VaceWanModel.from_pretrained(checkpoint_dir)
+        self.model = VaceWanModel.from_pretrained(checkpoint_dir, map_location='cpu')
         self.model.eval().requires_grad_(False)
 
         if use_usp:

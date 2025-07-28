@@ -198,10 +198,12 @@ def main(args):
     args = validate_args(args)
 
     rank = int(os.getenv("RANK", 0))
-    world_size = int(os.getenv("WORLD_SIZE", 1))
     local_rank = int(os.getenv("LOCAL_RANK", 0))
     device = local_rank
     _init_logging(rank)
+
+    world_size = int(os.getenv("WORLD_SIZE", 1))
+    logging.info(f"World size: {world_size}")
 
     if args.offload_model is None:
         args.offload_model = False if world_size > 1 else True
@@ -270,7 +272,8 @@ def main(args):
         args.prompt = input_prompt[0]
         logging.info(f"Extended prompt: {args.prompt}")
 
-    logging.info("Creating WanT2V pipeline.")
+    logging.info("Creating Wan pipeline.")
+
     wan_vace = WanVace(
         config=cfg,
         checkpoint_dir=args.ckpt_dir,

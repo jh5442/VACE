@@ -134,16 +134,22 @@ class InpaintingAnnotator:
 
 class InpaintingVideoAnnotator:
     def __init__(self, cfg, device=None):
+        print('InpaintingVideoAnnotator')
         self.use_aug = cfg.get('USE_AUG', True)
         self.return_frame = cfg.get('RETURN_FRAME', True)
         self.return_mask = cfg.get('RETURN_MASK', True)
         self.return_source = cfg.get('RETURN_SOURCE', True)
         self.mask_color = cfg.get('MASK_COLOR', 128)
         self.mode = cfg.get('MODE', "mask")
+        print("Mode in Init:", self.mode)
+
+
         assert self.mode in ["salient", "mask", "bbox", "salientmasktrack", "salientbboxtrack", "maskpointtrack", "maskbboxtrack", "masktrack", "bboxtrack", "label", "caption", "all"]
+
         if self.mode in ["salient", "salienttrack"]:
             from .salient import SalientAnnotator
             self.salient_model = SalientAnnotator(cfg['SALIENT'], device=device)
+            print(self.salient_model)
         if self.mode in ['masktrack', 'bboxtrack', 'salienttrack']:
             from .sam2 import SAM2VideoAnnotator
             self.sam2_model = SAM2VideoAnnotator(cfg['SAM2'], device=device)
@@ -200,6 +206,9 @@ class InpaintingVideoAnnotator:
         return_mask = return_mask if return_mask is not None else self.return_mask
         return_source = return_source if return_source is not None else self.return_source
         mask_color = mask_color if mask_color is not None else self.mask_color
+
+        print("mode:", mode)
+        print(self.salient_model)
 
         out_frames, out_masks = [], []
         if mode in ['salient']:
